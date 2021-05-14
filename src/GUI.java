@@ -1,21 +1,23 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import checker.SpellChecker;
 
-public class App implements ActionListener {
+public class GUI implements ActionListener {
     private JLabel label;
     private JFrame frame;
     private JPanel panel;
     private JTextField field;
     private JButton button;
 
-    public App() {
+    public GUI() {
         frame = new JFrame();
         field = new JTextField();
         button = new JButton("Submit");
@@ -36,14 +38,16 @@ public class App implements ActionListener {
         frame.pack();
         frame.setVisible(true);
     }
+
     public static void main(String[] args) {
-        new App();
+        new GUI();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String text = field.getText();
-        label.setText(text);
+        SpellChecker checker = new SpellChecker();
+        String str = checker.check(field.getText());        
+        label.setText(str);
         field.setText("");
     }
 }
