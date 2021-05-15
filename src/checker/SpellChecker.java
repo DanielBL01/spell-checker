@@ -1,16 +1,18 @@
 package checker;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SpellChecker {
     private WordBank bank;
-    // private StringBuilder falseStr;
+    private Set<String> track;
     private StringBuilder list;
     private AutoComplete ac;
     private String file = "C:/Users/byung/workspace/java/spell-checker/wordbank/wordbank.txt";
 
     public SpellChecker() {
-        // falseStr = new StringBuilder();
+        track = new HashSet<>();
         list = new StringBuilder();
         bank = new WordBank();
         ac = new AutoComplete();
@@ -20,16 +22,12 @@ public class SpellChecker {
     }
 
     public String check(String text) {
-        // String[] words = text.replaceAll("[\\p{P}&&[^\u0027]]", "").toLowerCase().split("\\s+");
-        // for (String word : words) {
-        //     if (!bank.contains(word.toLowerCase())) {
-        //         falseStr.append(word + " ");
-        //     }
-        // }
-        
-        // return falseStr.toString();
         List<String> result = ac.getWords(text);
         for (String word : result) {
+            if (track.contains(word.substring(0, word.length() - 1)) || track.contains(word.substring(0, word.length() - 2))) {
+                continue;
+            }
+            track.add(word);
             list.append(word + " ");
         }
 

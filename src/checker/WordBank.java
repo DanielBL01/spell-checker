@@ -26,10 +26,6 @@ public class WordBank {
         }
     }
 
-    public Boolean contains(String word) {
-        return bank.contains(word);
-    }
-
     public Set<String> get() {
         return bank;
     }
