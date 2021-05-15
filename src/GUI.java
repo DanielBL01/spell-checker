@@ -8,31 +8,49 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import checker.SpellChecker;
+import javax.swing.event.DocumentEvent;
+// import checker.SpellChecker;
+import javax.swing.event.DocumentListener;
 
 public class GUI implements ActionListener {
     private JLabel label;
     private JFrame frame;
     private JPanel panel;
     private JTextField field;
-    private JButton button, reset;
+    private JButton reset;
+    // private SpellChecker checker;
 
     public GUI() {
+        // checker = new SpellChecker();
+
         frame = new JFrame();
         field = new JTextField();
         reset = new JButton("Reset");
-        button = new JButton("Submit");
         label = new JLabel("Nothing Entered");
-
         reset.addActionListener(this);
-        button.addActionListener(this);
+
+        DocumentListener documentListener = new DocumentListener() {
+            public void changedUpdate(DocumentEvent documentEvent) {
+                printIt(documentEvent);
+            }
+            public void insertUpdate(DocumentEvent documentEvent) {
+                printIt(documentEvent);
+            }
+            public void removeUpdate(DocumentEvent documentEvent) {
+                printIt(documentEvent);
+            }
+            private void printIt(DocumentEvent documentEvent) {
+                String str = field.getText();
+                label.setText(str);
+            }
+        };
+        field.getDocument().addDocumentListener(documentListener);
 
         panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         panel.setLayout(new GridLayout(0, 1));
         panel.add(field);
         panel.add(reset);
-        panel.add(button);
         panel.add(label);
 
         frame.add(panel, BorderLayout.CENTER);
@@ -51,10 +69,6 @@ public class GUI implements ActionListener {
         if (e.getSource() == reset) {
             label.setText("Nothing Entered");
             field.setText("");
-        } else {
-            SpellChecker checker = new SpellChecker();
-            String str = checker.check(field.getText());        
-            label.setText(str);
         }
     }
 }

@@ -25,7 +25,8 @@ public class AutoComplete {
         trie = new Node("");
         Iterator<String> it = words.iterator();
         while(it.hasNext()) {
-            insertWord(it.next());
+            String str = it.next();
+            insertWord(str.toLowerCase());
         }
     }
 

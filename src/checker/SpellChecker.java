@@ -9,7 +9,7 @@ public class SpellChecker {
     private Set<String> track;
     private StringBuilder list;
     private AutoComplete ac;
-    private String file = "C:/Users/byung/workspace/java/spell-checker/wordbank/wordbank.txt";
+    private String file = System.getProperty("user.dir") + "/wordbank/wordbank.txt";
 
     public SpellChecker() {
         track = new HashSet<>();
@@ -21,7 +21,10 @@ public class SpellChecker {
         ac.buildTrie(bank.get());
     }
 
-    public String check(String text) {
+    public String autoComplete(String text) {
+        track.clear();
+        list.setLength(0);
+
         List<String> result = ac.getWords(text);
         for (String word : result) {
             if (track.contains(word.substring(0, word.length() - 1)) || track.contains(word.substring(0, word.length() - 2))) {
