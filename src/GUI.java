@@ -5,29 +5,29 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
-// import checker.SpellChecker;
+import checker.SpellChecker;
 import javax.swing.event.DocumentListener;
 
 public class GUI implements ActionListener {
-    private JLabel label;
+    private JTextArea display;
     private JFrame frame;
     private JPanel panel;
     private JTextField field;
     private JButton reset;
-    // private SpellChecker checker;
-
+    private SpellChecker checker;
     public GUI() {
-        // checker = new SpellChecker();
-
+        checker = new SpellChecker();
         frame = new JFrame();
         field = new JTextField();
         reset = new JButton("Reset");
-        label = new JLabel("Nothing Entered");
         reset.addActionListener(this);
+        display = new JTextArea("Nothing Entered");
+        display.setWrapStyleWord(true);
+        display.setLineWrap(true);
 
         DocumentListener documentListener = new DocumentListener() {
             public void changedUpdate(DocumentEvent documentEvent) {
@@ -40,8 +40,16 @@ public class GUI implements ActionListener {
                 printIt(documentEvent);
             }
             private void printIt(DocumentEvent documentEvent) {
-                String str = field.getText();
-                label.setText(str);
+                String str = field.getText().toLowerCase();
+                String prefix = str.substring(str.lastIndexOf(" ") + 1);
+                if (prefix.length() >= 2) {
+                    String ac = checker.autoComplete(prefix);
+                    if (ac == "0") {
+                        display.setText("Found no recommended words");
+                    } else {
+                        display.setText(ac);
+                    }
+                }
             }
         };
         field.getDocument().addDocumentListener(documentListener);
@@ -51,7 +59,7 @@ public class GUI implements ActionListener {
         panel.setLayout(new GridLayout(0, 1));
         panel.add(field);
         panel.add(reset);
-        panel.add(label);
+        panel.add(display);
 
         frame.add(panel, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,7 +75,7 @@ public class GUI implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == reset) {
-            label.setText("Nothing Entered");
+            display.setText("Nothing Entered");
             field.setText("");
         }
     }
