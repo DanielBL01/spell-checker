@@ -17,14 +17,17 @@ public class GUI implements ActionListener {
     private JFrame frame;
     private JPanel panel;
     private JTextField field;
-    private JButton reset;
+    private JButton reset, check;
     private SpellChecker checker;
+
     public GUI() {
         checker = new SpellChecker();
         frame = new JFrame();
         field = new JTextField();
         reset = new JButton("Reset");
         reset.addActionListener(this);
+        check = new JButton("Spell Check");
+        check.addActionListener(this);
         display = new JTextArea("Nothing Entered");
         display.setWrapStyleWord(true);
         display.setLineWrap(true);
@@ -59,6 +62,7 @@ public class GUI implements ActionListener {
         panel.setLayout(new GridLayout(0, 1));
         panel.add(field);
         panel.add(reset);
+        panel.add(check);
         panel.add(display);
 
         frame.add(panel, BorderLayout.CENTER);
@@ -77,6 +81,10 @@ public class GUI implements ActionListener {
         if (e.getSource() == reset) {
             display.setText("Nothing Entered");
             field.setText("");
+        } else if (e.getSource() == check) {
+            String text = field.getText().toLowerCase();
+            String result = checker.spellCheck(text);
+            display.setText(result);
         }
     }
 }

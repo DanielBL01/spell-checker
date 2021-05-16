@@ -6,6 +6,7 @@ import java.util.Set;
 
 public class SpellChecker {
     private WordBank bank;
+    private StringBuilder falseStr;
     private Set<String> track;
     private StringBuilder list;
     private AutoComplete ac;
@@ -14,6 +15,7 @@ public class SpellChecker {
     public SpellChecker() {
         track = new HashSet<>();
         list = new StringBuilder();
+        falseStr = new StringBuilder();
         bank = new WordBank();
         ac = new AutoComplete();
 
@@ -39,5 +41,16 @@ public class SpellChecker {
     
             return list.toString();
         }
+    }
+
+    public String spellCheck(String text) {
+        String[] words = text.replaceAll("[\\p{P}&&[^\u0027]]", "").toLowerCase().split("\\s+");
+        for (String word : words) {
+            if (!bank.get().contains(word)) {
+                falseStr.append(word + " ");
+            }
+        }
+
+        return falseStr.toString();
     }
 }

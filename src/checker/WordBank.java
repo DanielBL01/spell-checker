@@ -18,7 +18,7 @@ public class WordBank {
             BufferedReader reader = new BufferedReader(new FileReader(wordBank));
             String word;
             while ((word = reader.readLine()) != null) {
-                bank.add(word);
+                bank.add(word.toLowerCase());
             }
             reader.close();
         } catch (IOException e) {
